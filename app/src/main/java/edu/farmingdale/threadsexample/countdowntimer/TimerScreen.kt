@@ -52,7 +52,7 @@ fun TimerScreen(
             }
             Text(
                 text = timerText(timerViewModel.remainingMillis),
-                fontSize = 40.sp,
+                fontSize = 60.sp,//made text of timer larger from 40 to 60
             )
         }
         TimePicker(
