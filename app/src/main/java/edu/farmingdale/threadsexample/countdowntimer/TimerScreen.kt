@@ -40,7 +40,7 @@ fun TimerScreen(
     modifier: Modifier = Modifier,
     timerViewModel: TimerViewModel = viewModel()
 ) {
-    val totalMillis = timerViewModel.totalMillis // Assuming this value is set in the ViewModel
+    val totalMillis = timerViewModel.totalMillis
     val progress by animateFloatAsState(
         targetValue = if (totalMillis > 0) timerViewModel.remainingMillis / totalMillis.toFloat() else 0f,
         animationSpec = tween(durationMillis = 1000, easing = LinearEasing)
