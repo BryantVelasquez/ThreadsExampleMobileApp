@@ -40,6 +40,12 @@ fun TimerScreen(
     modifier: Modifier = Modifier,
     timerViewModel: TimerViewModel = viewModel()
 ) {
+    val totalMillis = timerViewModel.totalMillis // Assuming this value is set in the ViewModel
+    val progress by animateFloatAsState(
+        targetValue = if (totalMillis > 0) timerViewModel.remainingMillis / totalMillis.toFloat() else 0f,
+        animationSpec = tween(durationMillis = 1000, easing = LinearEasing)
+    )
+
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Box(
             modifier = modifier
@@ -47,20 +53,25 @@ fun TimerScreen(
                 .size(240.dp),
             contentAlignment = Alignment.Center
         ) {
-            if (timerViewModel.isRunning) {
-
-            }
+            CircularProgressIndicator(
+                progress = progress,
+                color = Color.Magenta,
+                modifier = Modifier.size(240.dp),
+                strokeWidth = 8.dp
+            )
             Text(
                 text = timerText(timerViewModel.remainingMillis),
-                fontSize = 60.sp,//made text of timer larger from 40 to 60
+                fontSize = 60.sp
             )
         }
+
         TimePicker(
             hour = timerViewModel.selectedHour,
             min = timerViewModel.selectedMinute,
             sec = timerViewModel.selectedSecond,
             onTimePick = timerViewModel::selectTime
         )
+
         if (timerViewModel.isRunning) {
             Button(
                 onClick = timerViewModel::cancelTimer,
@@ -82,8 +93,6 @@ fun TimerScreen(
     }
 }
 
-
-
 fun timerText(timeInMillis: Long): String {
     val duration: Duration = timeInMillis.milliseconds
     return String.format(
@@ -98,7 +107,6 @@ fun TimePicker(
     sec: Int = 0,
     onTimePick: (Int, Int, Int) -> Unit = { _: Int, _: Int, _: Int -> }
 ) {
-    // Values must be remembered for calls to onPick()
     var hourVal by remember { mutableIntStateOf(hour) }
     var minVal by remember { mutableIntStateOf(min) }
     var secVal by remember { mutableIntStateOf(sec) }
