@@ -72,4 +72,8 @@ class TimerViewModel : ViewModel() {
         super.onCleared()
         timerJob?.cancel()
     }
+    fun resetTimer(){
+        remainingMillis = (selectedHour * 3600000L) + (selectedMinute * 60000L) + (selectedSecond * 1000L)
+        isRunning = false
+    }
 }

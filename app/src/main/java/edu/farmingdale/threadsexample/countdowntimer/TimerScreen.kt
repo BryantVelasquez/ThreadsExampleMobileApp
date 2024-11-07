@@ -90,6 +90,12 @@ fun TimerScreen(
                 Text("Start")
             }
         }
+        Button(
+            onClick = timerViewModel::resetTimer,
+            modifier = modifier.padding(10.dp)
+        ){
+            Text("Reset")
+        }
     }
 }
 
