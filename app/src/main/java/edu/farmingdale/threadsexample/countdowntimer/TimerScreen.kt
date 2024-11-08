@@ -1,6 +1,5 @@
 package edu.farmingdale.threadsexample.countdowntimer
 
-import android.util.Log
 import android.widget.NumberPicker
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -25,10 +24,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.viewmodel.compose.viewModel
 import java.text.DecimalFormat
 import java.util.Locale
@@ -46,6 +47,24 @@ fun TimerScreen(
         animationSpec = tween(durationMillis = 1000, easing = LinearEasing)
     )
 
+    // Check if the remaining time is 10 seconds or less
+    val isLast10Seconds = timerViewModel.remainingMillis <= 10000 && timerViewModel.remainingMillis > 0
+
+    // Define text style for the last 10 seconds
+    val timerTextStyle = if (isLast10Seconds) {
+        TextStyle(
+            color = Color.Red,
+            fontWeight = FontWeight.Bold,
+            fontSize = 60.sp
+        )
+    } else {
+        TextStyle(
+            color = Color.Black,
+            fontWeight = FontWeight.Normal,
+            fontSize = 60.sp
+        )
+    }
+
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Box(
             modifier = modifier
@@ -61,7 +80,7 @@ fun TimerScreen(
             )
             Text(
                 text = timerText(timerViewModel.remainingMillis),
-                fontSize = 60.sp
+                style = timerTextStyle // Apply dynamic style
             )
         }
 
@@ -93,7 +112,7 @@ fun TimerScreen(
         Button(
             onClick = timerViewModel::resetTimer,
             modifier = modifier.padding(10.dp)
-        ){
+        ) {
             Text("Reset")
         }
     }
@@ -102,8 +121,9 @@ fun TimerScreen(
 fun timerText(timeInMillis: Long): String {
     val duration: Duration = timeInMillis.milliseconds
     return String.format(
-        Locale.getDefault(),"%02d:%02d:%02d",
-        duration.inWholeHours, duration.inWholeMinutes % 60, duration.inWholeSeconds % 60)
+        Locale.getDefault(), "%02d:%02d:%02d",
+        duration.inWholeHours, duration.inWholeMinutes % 60, duration.inWholeSeconds % 60
+    )
 }
 
 @Composable
