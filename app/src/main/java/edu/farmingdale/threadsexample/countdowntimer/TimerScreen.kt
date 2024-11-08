@@ -47,10 +47,10 @@ fun TimerScreen(
         animationSpec = tween(durationMillis = 1000, easing = LinearEasing)
     )
 
-    // Check if the remaining time is 10 seconds or less
+
     val isLast10Seconds = timerViewModel.remainingMillis <= 10000 && timerViewModel.remainingMillis > 0
 
-    // Define text style for the last 10 seconds
+
     val timerTextStyle = if (isLast10Seconds) {
         TextStyle(
             color = Color.Red,
